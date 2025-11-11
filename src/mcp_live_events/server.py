@@ -20,3 +20,6 @@ async def get_upcoming_events(city: str, start_dttm_str: str, end_dttm_str: str,
     data = await EventsApiClient().fetch_events(city=city, start_dttm_str=start_dttm_str, end_dttm_str=end_dttm_str, keyword=keyword)
 
     return format_events(data)
+
+if __name__ == "__main__":
+    mcp.run()
