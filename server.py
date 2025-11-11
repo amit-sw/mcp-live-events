@@ -1,3 +1,4 @@
+import os
 from fastmcp import FastMCP
 mcp = FastMCP("mcp-live-events")
 
