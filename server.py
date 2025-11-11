@@ -1,4 +1,5 @@
 import os
+import requests
 from fastmcp import FastMCP
 mcp = FastMCP("mcp-live-events")
 
@@ -30,7 +31,6 @@ class EventsApiClient:
 
     def fetch_events(
         self,
-        city: str,
         start_dttm_str: str,
         end_dttm_str: str,
         classification_name: str = "Music",
@@ -39,7 +39,6 @@ class EventsApiClient:
         try:
             params = {
                 "apikey": self.api_key,
-                "city": city,
                 "startDateTime": start_dttm_str,
                 "endDateTime": end_dttm_str,
                 "classificationName": classification_name,
@@ -47,7 +46,7 @@ class EventsApiClient:
             }
             if keyword:
                 params["keyword"] = keyword
-            response = request.get(
+            response = requests.get(
                 f"{self.base_url}/events.json",
                 params=params,
                 timeout=30.0,
@@ -63,13 +62,12 @@ def get_upcoming_events(city: str, start_dttm_str: str, end_dttm_str: str, keywo
     Get upcoming music events for a city.
     
     Args:
-        city: City in which to search for events.
         start_dttm_str: Start date/time in ISO 8601 format (YYYY-MM-DDTHH:MM:SSZ). Example: 2025-02-08T00:00:00Z
         end_dttm_str: Start date/time in ISO 8601 format (YYYY-MM-DDTHH:MM:SSZ). Example: 2025-02-10T00:00:00Z
         keyword: Any optional keywords to help filter search results.
     """
 
-    data = EventsApiClient().fetch_events(city=city, start_dttm_str=start_dttm_str, end_dttm_str=end_dttm_str, keyword=keyword)
+    data = EventsApiClient().fetch_events(start_dttm_str=start_dttm_str, end_dttm_str=end_dttm_str, keyword=keyword)
 
     return format_events(data)
 
