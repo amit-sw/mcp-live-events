@@ -22,39 +22,29 @@ Venue: {event.get("_embedded")["venues"][0]["name"]}
         ]
     )
     
-class EventsApiClient:
-    def __init__(self):
-        self.base_url = "https://app.ticketmaster.com/discovery/v2"
-        self.api_key = os.environ.get("TICKETMASTER_API_KEY")
-        if not self.api_key:
-            raise ValueError("Ticketmaster API key missing!")
 
-    def fetch_events(
-        self,
-        start_dttm_str: str,
-        end_dttm_str: str,
-        classification_name: str = "Music",
-        keyword: str | None = None,
-    ) -> dict | None:
-        try:
-            params = {
-                "apikey": self.api_key,
-                "startDateTime": start_dttm_str,
-                "endDateTime": end_dttm_str,
-                "classificationName": classification_name,
-                "size": 100,
-            }
-            if keyword:
-                params["keyword"] = keyword
-            response = requests.get(
-                f"{self.base_url}/events.json",
-                params=params,
-                timeout=30.0,
-            )
-            response.raise_for_status()
-            return response.json()
-        except Exception:
-            return None
+def fetch_events(start_dttm_str: str,end_dttm_str: str,classification_name: str = "Music",keyword: str | None = None,) -> dict | None:
+    base_url = "https://app.ticketmaster.com/discovery/v2"
+    api_key = os.environ.get("TICKETMASTER_API_KEY")
+    try:
+        params = {
+            "apikey": api_key,
+            "startDateTime": start_dttm_str,
+            "endDateTime": end_dttm_str,
+            "classificationName": classification_name,
+            "size": 100,
+        }
+        if keyword:
+            params["keyword"] = keyword
+        response = requests.get(
+            f"{base_url}/events.json",
+            params=params,
+            timeout=30.0,
+        )
+        response.raise_for_status()
+        return response.json()
+    except Exception:
+        return None
 
 @mcp.tool()
 def get_upcoming_events(start_dttm_str: str, end_dttm_str: str, keyword: str | None = None) -> str:
@@ -67,7 +57,7 @@ def get_upcoming_events(start_dttm_str: str, end_dttm_str: str, keyword: str | N
         keyword: Any optional keywords to help filter search results.
     """
 
-    data = EventsApiClient().fetch_events(start_dttm_str=start_dttm_str, end_dttm_str=end_dttm_str, keyword=keyword)
+    data = fetch_events(start_dttm_str=start_dttm_str, end_dttm_str=end_dttm_str, keyword=keyword)
 
     return format_events(data)
 
