@@ -57,9 +57,9 @@ class EventsApiClient:
             return None
 
 @mcp.tool()
-def get_upcoming_events(city: str, start_dttm_str: str, end_dttm_str: str, keyword: str | None = None) -> str:
+def get_upcoming_events(start_dttm_str: str, end_dttm_str: str, keyword: str | None = None) -> str:
     """
-    Get upcoming music events for a city.
+    Get upcoming music events.
     
     Args:
         start_dttm_str: Start date/time in ISO 8601 format (YYYY-MM-DDTHH:MM:SSZ). Example: 2025-02-08T00:00:00Z
