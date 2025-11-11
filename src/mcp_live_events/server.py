@@ -1,7 +1,7 @@
 from mcp.server.fastmcp import FastMCP
 
-from .utils import format_events
-from .events_api_client import EventsApiClient
+from mcp_live_events.utils import format_events
+from mcp_live_events.events_api_client import EventsApiClient
 
 mcp = FastMCP("mcp-live-events")
 
